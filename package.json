@@ -1,0 +1,20 @@
+{
+  "name": "@smaughk/http-sig",
+  "displayName": "HTTP Message Signature",
+  "description": "Sign HTTP requests using RFC 9421 HTTP Message Signatures with PEM private keys",
+  "private": true,
+  "version": "0.0.22",
+  "scripts": {
+    "build": "yaakcli build",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@yaakapp/cli": "^0.3.4",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14"
+  },
+  "dependencies": {
+    "@yaakapp/api": "^0.7.0"
+  }
+}
