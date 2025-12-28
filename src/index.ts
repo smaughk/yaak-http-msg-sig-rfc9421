@@ -69,6 +69,22 @@ const httpSigPlugin: AuthenticationPlugin = {
             defaultValue: "rfc9421-default",
             optional: true,
         },
+        {
+            type: "text",
+            name: "additionalSignatureInput",
+            label: "Additional Signature-Input",
+            placeholder: "component1 component2",
+            description: "will add a comma delimited value",
+            optional: true,
+        },
+        {
+            type: "text",
+            name: "signatureField",
+            label: "Additional Signature field",
+            placeholder: "component1 component2",
+            description: "will add a comma delimited value",
+            optional: true,
+        },
     ],
 
     async onApply(ctx, args) {
@@ -243,7 +259,20 @@ const httpSigPlugin: AuthenticationPlugin = {
             signatureInputValue += `;keyid="${keyId}"`;
         }
         signatureInputValue += `;nonce="${nonce}"`;
-        const signatureValueFinal = `sig1=:${signatureValue}:`;
+        
+        // Append additional signature input if provided
+        const additionalSignatureInput = args.values.additionalSignatureInput;
+        if (additionalSignatureInput && additionalSignatureInput.trim()) {
+            signatureInputValue += `, ${additionalSignatureInput.trim()}`;
+        }
+        
+        let signatureValueFinal = `sig1=:${signatureValue}:`;
+        
+        // Append signature field if provided
+        const signatureField = args.values.signatureField;
+        if (signatureField && signatureField.trim()) {
+            signatureValueFinal += `, ${signatureField.trim()}`;
+        }
 
         return {
             setHeaders: [
