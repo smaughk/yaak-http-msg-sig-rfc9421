@@ -112,7 +112,7 @@ var httpSigPlugin = {
     {
       type: "text",
       name: "signatureField",
-      label: "Additional Signature field",
+      label: "Signature field",
       placeholder: "component1 component2",
       description: "will add a comma delimited value",
       optional: true
