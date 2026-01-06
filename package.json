@@ -3,7 +3,7 @@
   "displayName": "RFC9421 HTTP Message Signature",
   "description": "Sign HTTP requests using RFC 9421 HTTP Message Signatures with PEM private keys",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/smaughk/yaak-http-msg-sig-rfc9421.git"

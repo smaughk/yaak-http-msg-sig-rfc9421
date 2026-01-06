@@ -4,7 +4,12 @@ A Yaak authentication plugin that implements RFC 9421 HTTP Message Signatures, a
 
 ## Features
 
-- Sign HTTP requests using RSA-PSS-SHA512 or RSA-PKCS1-v1.5-SHA256 algorithms
+- Sign HTTP requests using the following algorithms:
+  - ECDSA-SHA256
+  - ECDSA-SHA512
+  - Ed25519
+  - RSA-PSS-SHA512
+  - RSA-PKCS1-v1.5-SHA256
 - Automatic signature header generation
 - Configurable private key and algorithm
 - Adds `Signature-Input` and `Signature` headers to requests
@@ -40,49 +45,27 @@ For testing purposes, you can generate a private key using OpenSSL:
 openssl genrsa -out private_key.pem 2048
 
 # Convert to PKCS#8 format (recommended)
-openssl pkcs8 -topk8 -inform PEM -outform PEM -in private_key.pem -out private_key_pkcs8.pem -nocrypt
+openssl pkcs8 -topk8 -inform PEM \
+  -outform PEM -in private_key.pem \
+  -out private_key_pkcs8.pem -nocrypt
 ```
 
 The content of `private_key_pkcs8.pem` can be used as the `HTTPMessageSignature.privateKey` variable.
 
 ## Covered Components
 
-The plugin currently signs the following request components:
+The plugin currently signs a combination of the following request components:
 
 - `@method`: HTTP method
 - `@authority`: Host header value
 - `@path`: Request path
+- `@target-uri`: The absolute URI of the resource
+- `@request-target`: Depending on the request method; Absolute URI, Relative Path or *
+- `host`: Host header value
+- `date`: Date header value
 - `content-digest`: Content digest header (if present)
+- `content-type`: Content type header (if present)
 
-## Example
-
-### Setting up Variables
-
-In Yaak Variables, set:
-
-```
-httpsig_privateKey = -----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC...\n-----END PRIVATE KEY-----
-httpsig_keyId = my-key
-httpsig_algorithm = rsa-pss-sha512
-```
-
-### Using in a Request
-
-Add these headers to your HTTP request:
-
-```
-Signature-Input: {{httpsig(signature-input)}}
-Signature: {{httpsig(signature)}}
-```
-
-Right-click the request → **"Generate HTTP Signature"**
-
-The headers will be replaced with actual signatures:
-
-```
-Signature-Input: sig1=("@method" "@authority" "@path");created=1640995200;keyid="my-key"
-Signature: sig1=:base64-encoded-signature:
-```
 
 ## Security Notes
 
@@ -91,19 +74,6 @@ Signature: sig1=:base64-encoded-signature:
 - The signature includes a timestamp to prevent replay attacks
 - Consider the security implications of the components you're signing
 
-## Development
-
-To build the plugin:
-
-```bash
-npm run build
-```
-
-To run tests:
-
-```bash
-npm test
-```
 
 ## License
 
