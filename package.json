@@ -5,9 +5,9 @@
   "private": true,
   "version": "0.1.0",
   "repository": {
-        "type": "git",
-        "url": "https://github.com/smaughk/yaak-http-msg-sig-rfc9421.git"
-    },
+    "type": "git",
+    "url": "https://github.com/smaughk/yaak-http-msg-sig-rfc9421.git"
+  },
   "scripts": {
     "build": "yaakcli build",
     "test": "vitest run"
