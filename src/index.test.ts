@@ -13,15 +13,20 @@ describe('HTTP Signature Plugin', () => {
         expect(authPlugin.label).toBe('HTTP Message Signatures (RFC 9421)');
         expect(authPlugin.onApply).toBeTypeOf('function');
         expect(authPlugin.args).toBeDefined();
-        expect(authPlugin.args.length).toBe(7);
+        expect(authPlugin.args.length).toBe(6); // Now 6 because the last 2 fields are wrapped in an accordion
     });
 
-    test('Has new additional fields', () => {
+    test('Has new additional fields in accordion', () => {
         const authPlugin = plugin.authentication;
-        const additionalFields = authPlugin.args.filter(arg => 
-            arg.name === 'additionalSignatureInput' || arg.name === 'signatureField'
-        );
-        expect(additionalFields.length).toBe(2);
+        // Find the accordion
+        const accordion = authPlugin.args.find(arg => arg.type === 'accordion');
+        expect(accordion).toBeDefined();
+        expect(accordion?.label).toBe('Additional Options');
+        expect(accordion?.inputs).toBeDefined();
+        expect(accordion?.inputs?.length).toBe(2);
+        
+        // Check the fields inside the accordion
+        const additionalFields = accordion?.inputs || [];
         expect(additionalFields[0].name).toBe('additionalSignatureInput');
         expect(additionalFields[1].name).toBe('signatureField');
     });
